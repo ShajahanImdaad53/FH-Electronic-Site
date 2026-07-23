@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Shop - FH Online Store{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in" style="margin-top: 2rem;">
+    <h2 style="font-size: 2.5rem; margin-bottom: 2rem; font-weight: 700; color: var(--text-main);">Our Collection</h2>
+    
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card glass">
+            <a href="{{ url_for('product', product_id=product.id) }}" class="product-image-wrap">
+                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" loading="lazy">
+            </a>
+            <div class="product-info">
+                <a href="{{ url_for('product', product_id=product.id) }}" class="product-title">{{ product.name }}</a>
+                <div class="product-price">LKR {{ "{:,.2f}".format(product.price) }}</div>
+                <a href="{{ url_for('product', product_id=product.id) }}" class="btn-primary" style="text-align: center; width: 100%; display: inline-block;">View Details</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="glass" style="grid-column: 1 / -1; padding: 3rem; text-align: center; border-radius: 1rem;">
+            <h3>No products found.</h3>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Please run the scraper to populate the database.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FH Online Store | Premium Electronics{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar glass">
+        <a href="{{ url_for('index') }}" class="nav-brand">FH STORE</a>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('shop') }}">Shop</a>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="glass">
+        <p>&copy; 2026 FH Online Store. Premium Electronics Hub.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

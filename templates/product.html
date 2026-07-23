@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - FH Online Store{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-detail-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .product-detail-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    .product-detail-image {
+        border-radius: 2rem;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.02);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .product-detail-image img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 1rem;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .product-detail-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .product-detail-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .product-detail-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 2rem;
+    }
+
+    .product-description {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+    }
+
+    .back-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <a href="{{ url_for('shop') }}" class="back-link">&larr; Back to Shop</a>
+    
+    <div class="product-detail-container">
+        <div class="product-detail-image glass">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ product.name }}</h1>
+            <div class="product-detail-price">LKR {{ "{:,.2f}".format(product.price) }}</div>
+            <p class="product-description">
+                Experience premium quality with the {{ product.name }}. Designed with precision and crafted for everyday excellence.
+            </p>
+            <button class="btn-primary" style="width: fit-content; padding: 1rem 3rem; font-size: 1.1rem;">Add to Cart</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
