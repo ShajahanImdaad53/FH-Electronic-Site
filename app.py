@@ -28,13 +28,22 @@ def index():
 
 @app.route("/shop")
 def shop():
-    products = Product.query.all()
-    return render_template("shop.html", products=products)
+    from flask import request
+    search_query = request.args.get('q', '')
+    if search_query:
+        products = Product.query.filter(Product.name.ilike(f'%{search_query}%')).all()
+    else:
+        products = Product.query.all()
+    return render_template("shop.html", products=products, search_query=search_query)
 
 @app.route("/product/<int:product_id>")
 def product(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template("product.html", product=product)
+
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

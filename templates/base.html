@@ -6,14 +6,67 @@
     <title>{% block title %}FH Online Store | Premium Electronics{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
     {% block extra_css %}{% endblock %}
+    <style>
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            padding: 0.25rem 1rem;
+            margin-left: 2rem;
+        }
+        .search-bar input {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            outline: none;
+        }
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .cart-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar glass">
         <a href="{{ url_for('index') }}" class="nav-brand">FH STORE</a>
+        
+        <form action="{{ url_for('shop') }}" method="GET" class="search-bar">
+            <input type="text" name="q" placeholder="Search products..." value="{{ search_query if search_query else '' }}">
+            <button type="submit" style="background:none; border:none; color:white; cursor:pointer;">&#x1F50D;</button>
+        </form>
+
         <div class="nav-links">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('shop') }}">Shop</a>
+            <a href="{{ url_for('cart') }}" class="cart-icon-wrapper">
+                🛒
+                <span id="cart-count" class="cart-badge" style="display: none;">0</span>
+            </a>
         </div>
     </nav>
 
@@ -25,6 +78,7 @@
         <p>&copy; 2026 FH Online Store. Premium Electronics Hub.</p>
     </footer>
 
+    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

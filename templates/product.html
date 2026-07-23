@@ -54,7 +54,19 @@
         font-size: 2rem;
         font-weight: 700;
         color: var(--accent);
+        margin-bottom: 1rem;
+    }
+
+    .product-warranty {
+        display: inline-block;
+        background: rgba(79, 70, 229, 0.2);
+        color: #818cf8;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.9rem;
+        font-weight: bold;
         margin-bottom: 2rem;
+        width: fit-content;
     }
 
     .product-description {
@@ -91,10 +103,17 @@
         <div class="product-detail-info">
             <h1 class="product-detail-title">{{ product.name }}</h1>
             <div class="product-detail-price">LKR {{ "{:,.2f}".format(product.price) }}</div>
+            {% if product.warranty and product.warranty != 'Not Specified' %}
+            <div class="product-warranty">🛡️ {{ product.warranty }}</div>
+            {% endif %}
+            
             <p class="product-description">
-                Experience premium quality with the {{ product.name }}. Designed with precision and crafted for everyday excellence.
+                {{ product.description if product.description else 'Experience premium quality with the ' ~ product.name ~ '. Designed with precision and crafted for everyday excellence.' }}
             </p>
-            <button class="btn-primary" style="width: fit-content; padding: 1rem 3rem; font-size: 1.1rem;">Add to Cart</button>
+            
+            <button onclick="addToCart({{ product.id }}, '{{ product.name|replace("'", "\\'") }}', {{ product.price }}, '{{ url_for('static', filename=product.image) }}')" class="btn-primary" style="width: fit-content; padding: 1rem 3rem; font-size: 1.1rem;">
+                Add to Cart
+            </button>
         </div>
     </div>
 </div>

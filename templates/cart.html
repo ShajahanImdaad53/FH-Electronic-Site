@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Your Cart - FH Online Store{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in" style="margin-top: 2rem;">
+    <h2 style="font-size: 2.5rem; margin-bottom: 2rem; font-weight: 700;">Shopping Cart</h2>
+    
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        
+        <!-- Cart Items -->
+        <div id="cart-items-container">
+            <!-- Rendered via JS -->
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="glass" style="padding: 2rem; border-radius: 1.5rem; height: fit-content; position: sticky; top: 100px;">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Order Summary</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-muted);">
+                <span>Subtotal</span>
+                <span id="cart-total-price">LKR 0.00</span>
+            </div>
+            <hr style="border: 1px solid var(--glass-border); margin: 1rem 0;">
+            
+            <button onclick="placeOrderWhatsApp()" class="btn-primary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-size: 1.1rem; padding: 1rem;">
+                <span>📱 Order via WhatsApp</span>
+            </button>
+            
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+                Clicking this will open WhatsApp with your pre-filled order details.
+            </p>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
