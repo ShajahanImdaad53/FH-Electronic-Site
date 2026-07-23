@@ -24,7 +24,16 @@ with app.app_context():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # Fetch top 4 products for each category
+    categories_to_fetch = ["New Arrivals", "Power Banks", "Audio", "Chargers"]
+    categorized_products = {}
+    
+    for category in categories_to_fetch:
+        products = Product.query.filter(Product.category == category).limit(4).all()
+        if products:
+            categorized_products[category] = products
+            
+    return render_template("index.html", categorized_products=categorized_products)
 
 @app.route("/shop")
 def shop():

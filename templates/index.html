@@ -1,9 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="hero glass animate-fade-in">
-    <h1>Welcome to FH Store</h1>
-    <p>Discover the finest selection of premium electronic accessories, beautifully crafted for your daily life.</p>
-    <a href="{{ url_for('shop') }}" class="btn-primary">Explore Collection</a>
+<!-- Hero Section -->
+<section class="hero glass animate-fade-in" style="margin-top: 2rem;">
+    <h1>Premium Electronics Hub</h1>
+    <p>Discover the finest selection of Baseus electronic accessories, meticulously crafted for your daily life.</p>
+    
+    <!-- Hero Search Bar -->
+    <form action="{{ url_for('shop') }}" method="GET" class="hero-search-bar" style="margin-bottom: 2rem;">
+        <input type="text" name="q" placeholder="Search for earbuds, power banks, chargers..." required>
+        <button type="submit" class="hero-search-btn">Search</button>
+    </form>
 </section>
+
+<!-- Categorized Products -->
+<div class="animate-fade-in" style="animation-delay: 0.2s;">
+    {% for category, products in categorized_products.items() %}
+        <section class="category-section">
+            <h2 class="category-title">
+                <span>{{ category }}</span>
+                <a href="{{ url_for('shop', category=category) }}" class="view-all">View All &rarr;</a>
+            </h2>
+            
+            <div class="product-grid">
+                {% for product in products %}
+                <div class="product-card glass">
+                    <a href="{{ url_for('product', product_id=product.id) }}" class="product-image-wrap">
+                        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" loading="lazy">
+                    </a>
+                    <div class="product-info">
+                        <a href="{{ url_for('product', product_id=product.id) }}" class="product-title">{{ product.name }}</a>
+                        <div class="product-price">LKR {{ "{:,.2f}".format(product.price) }}</div>
+                        <a href="{{ url_for('product', product_id=product.id) }}" class="btn-primary" style="text-align: center; width: 100%; display: inline-block;">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% else %}
+        <div class="glass" style="padding: 3rem; text-align: center; border-radius: 1rem;">
+            <h3>No products found.</h3>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Please run the scraper to populate the database.</p>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

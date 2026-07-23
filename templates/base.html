@@ -61,6 +61,9 @@
         </form>
 
         <div class="nav-links">
+            <button onclick="toggleTheme()" class="theme-toggle" aria-label="Toggle Dark Mode">
+                <span id="theme-icon">🌙</span>
+            </button>
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('shop') }}">Shop</a>
             <a href="{{ url_for('cart') }}" class="cart-icon-wrapper">
