@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}FH Online Store | Premium Electronics{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}?v=2.0">
     {% block extra_css %}{% endblock %}
     <style>
         .search-bar {
@@ -81,7 +81,7 @@
         <p>&copy; 2026 FH Online Store. Premium Electronics Hub.</p>
     </footer>
 
-    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='JS/main.js') }}?v=2.0"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
