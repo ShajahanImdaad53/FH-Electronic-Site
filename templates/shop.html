@@ -4,8 +4,19 @@
 
 {% block content %}
 <div class="animate-fade-in" style="margin-top: 2rem;">
-    <h2 style="font-size: 2.5rem; margin-bottom: 2rem; font-weight: 700; color: var(--text-main);">Our Collection</h2>
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem; font-weight: 700; color: var(--text-main);">
+        {% if search_query %}Search Results for "{{ search_query }}"{% else %}Our Collection{% endif %}
+    </h2>
     
+    {% if categories %}
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+        <a href="{{ url_for('shop') }}" class="btn-primary" style="padding: 0.5rem 1rem; border-radius: 9999px; background: {% if not active_category %}var(--primary){% else %}rgba(255,255,255,0.1){% endif %};">All</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('shop', category=cat) }}" class="btn-primary" style="padding: 0.5rem 1rem; border-radius: 9999px; background: {% if active_category == cat %}var(--primary){% else %}rgba(255,255,255,0.1){% endif %};">{{ cat }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="product-grid">
         {% for product in products %}
         <div class="product-card glass">

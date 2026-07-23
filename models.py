@@ -9,6 +9,7 @@ class Product(db.Model):
     image = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
     warranty = db.Column(db.String(100), nullable=True)
+    category = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         return f"<Product {self.name}>"

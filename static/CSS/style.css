@@ -253,3 +253,36 @@ footer {
 .animate-fade-in {
     animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Cart Styling */
+.cart-item-ui {
+    display: flex; 
+    gap: 1.5rem; 
+    align-items: center; 
+    padding: 1rem; 
+    margin-bottom: 1rem; 
+    border-radius: 1.5rem;
+    transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--glass-border);
+}
+
+.cart-item-ui:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 9999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.whatsapp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+}

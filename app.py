@@ -30,11 +30,21 @@ def index():
 def shop():
     from flask import request
     search_query = request.args.get('q', '')
+    category_filter = request.args.get('category', '')
+    
+    query = Product.query
     if search_query:
-        products = Product.query.filter(Product.name.ilike(f'%{search_query}%')).all()
-    else:
-        products = Product.query.all()
-    return render_template("shop.html", products=products, search_query=search_query)
+        query = query.filter(Product.name.ilike(f'%{search_query}%'))
+    if category_filter:
+        query = query.filter(Product.category == category_filter)
+        
+    products = query.all()
+    
+    # Get all unique categories for the filter buttons
+    categories = db.session.query(Product.category).distinct().all()
+    categories = [c[0] for c in categories if c[0]]
+    
+    return render_template("shop.html", products=products, search_query=search_query, categories=categories, active_category=category_filter)
 
 @app.route("/product/<int:product_id>")
 def product(product_id):

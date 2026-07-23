@@ -101,6 +101,9 @@
             <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
         </div>
         <div class="product-detail-info">
+            {% if product.category %}
+            <div style="text-transform: uppercase; letter-spacing: 2px; color: var(--primary); font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">{{ product.category }}</div>
+            {% endif %}
             <h1 class="product-detail-title">{{ product.name }}</h1>
             <div class="product-detail-price">LKR {{ "{:,.2f}".format(product.price) }}</div>
             {% if product.warranty and product.warranty != 'Not Specified' %}

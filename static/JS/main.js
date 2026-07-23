@@ -79,7 +79,7 @@ function renderCartItems() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         html += `
-            <div class="cart-item glass" style="display: flex; gap: 1.5rem; align-items: center; padding: 1rem; margin-bottom: 1rem; border-radius: 1rem;">
+            <div class="cart-item-ui glass">
                 <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 0.5rem; background: rgba(255,255,255,0.05);">
                 <div style="flex: 1;">
                     <h4 style="margin-bottom: 0.25rem;">${item.name}</h4>
@@ -90,7 +90,7 @@ function renderCartItems() {
                     <span>${item.quantity}</span>
                     <button onclick="updateQuantity(${item.id}, 1)" class="btn-primary" style="padding: 0.25rem 0.75rem;">+</button>
                 </div>
-                <button onclick="removeFromCart(${item.id})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.5rem;">&times;</button>
+                <button onclick="removeFromCart(${item.id})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.5rem; transition: transform 0.2s; padding: 0.5rem;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
             </div>
         `;
     });

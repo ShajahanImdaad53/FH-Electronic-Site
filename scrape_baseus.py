@@ -6,12 +6,12 @@ import uuid
 from app import app, db
 from models import Product
 
-CATEGORIES = [
-    "https://baseuscolombo.lk/product-category/new-arrival/",
-    "https://baseuscolombo.lk/product-category/power-banks/",
-    "https://baseuscolombo.lk/product-category/earbuds-and-headset/wireless-earbuds/",
-    "https://baseuscolombo.lk/product-category/charging-adapters/"
-]
+CATEGORIES = {
+    "New Arrivals": "https://baseuscolombo.lk/product-category/new-arrival/",
+    "Power Banks": "https://baseuscolombo.lk/product-category/power-banks/",
+    "Audio": "https://baseuscolombo.lk/product-category/earbuds-and-headset/wireless-earbuds/",
+    "Chargers": "https://baseuscolombo.lk/product-category/charging-adapters/"
+}
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
@@ -27,8 +27,8 @@ def clean_price(price_str):
     except:
         return 0.0
 
-def scrape_category(url):
-    print(f"Scraping category: {url}")
+def scrape_category(cat_name, url):
+    print(f"Scraping category: {cat_name} ({url})")
     response = requests.get(url, headers=HEADERS)
     if response.status_code != 200:
         print(f"Failed to fetch {url}")
@@ -36,12 +36,11 @@ def scrape_category(url):
     
     soup = BeautifulSoup(response.text, 'html.parser')
     products = soup.find_all('li', class_='product')
-    print(f"Found {len(products)} products on this page. Fetching details...")
+    print(f"Found {len(products)} products in {cat_name}. Fetching details...")
     
     scraped_data = []
     
     for item in products:
-        # Try to find the link to the detail page
         link_elem = item.find('a', class_='woocommerce-LoopProduct-link')
         if not link_elem:
             link_elem = item.find('a')
@@ -51,11 +50,9 @@ def scrape_category(url):
             
         product_url = link_elem['href']
         
-        # Extract title from the grid first (it might be cleaner)
         title_elem = item.find('h2', class_='woocommerce-loop-product__title')
         raw_title = title_elem.text.strip() if title_elem else ""
         
-        # Price extraction from grid
         price_elem = item.find('span', class_='price')
         price_val = 0.0
         if price_elem:
@@ -67,7 +64,6 @@ def scrape_category(url):
             if amount:
                 price_val = clean_price(amount.text)
                 
-        # Image extraction from grid
         img_elem = item.find('img', class_='attachment-woocommerce_thumbnail')
         img_url = None
         if img_elem:
@@ -78,16 +74,13 @@ def scrape_category(url):
         if not raw_title or price_val == 0 or not img_url:
             continue
             
-        # Parse warranty from title
         warranty = "Not Specified"
         warranty_match = re.search(r'(-\s*)?(\d+\s*[yY]ear\s*[wW]arranty|6\s*[mM]onths\s*[wW]arranty)', raw_title)
         if warranty_match:
             warranty = warranty_match.group(2)
-            # Remove warranty from title
             raw_title = raw_title.replace(warranty_match.group(0), '').strip()
             
-        # Fetch Detail Page for description
-        desc_text = "Premium Baseus electronics accessory."
+        desc_text = f"Premium {cat_name} from Baseus Colombo."
         try:
             res_detail = requests.get(product_url, headers=HEADERS, timeout=10)
             if res_detail.status_code == 200:
@@ -96,14 +89,15 @@ def scrape_category(url):
                 if desc_elem:
                     desc_text = desc_elem.text.strip()
         except Exception as e:
-            pass # ignore timeouts and keep default desc
+            pass
             
         scraped_data.append({
             'title': raw_title,
             'price': price_val,
             'image_url': img_url,
             'description': desc_text,
-            'warranty': warranty
+            'warranty': warranty,
+            'category': cat_name
         })
             
     return scraped_data
@@ -123,15 +117,14 @@ def download_image(img_url, filename):
     return False
 
 def main():
-    print("Starting Baseus Colombo Scraper with Details...")
+    print("Starting Baseus Colombo Scraper with Categories...")
     all_products = []
-    for cat_url in CATEGORIES:
-        all_products.extend(scrape_category(cat_url))
+    for cat_name, cat_url in CATEGORIES.items():
+        all_products.extend(scrape_category(cat_name, cat_url))
         
     print(f"Total products scraped: {len(all_products)}")
     
     with app.app_context():
-        # Drop and recreate tables to apply schema changes
         db.drop_all()
         db.create_all()
         
@@ -143,18 +136,19 @@ def main():
             
             if download_image(item['image_url'], filename):
                 safe_title = item['title'].encode('ascii', 'ignore').decode('ascii')
-                print(f"Saved: {safe_title} - {item['warranty']}")
+                print(f"Saved: {safe_title} [{item['category']}]")
                 new_product = Product(
                     name=item['title'],
                     price=item['price'],
                     image=f"images/{filename}",
                     description=item['description'],
-                    warranty=item['warranty']
+                    warranty=item['warranty'],
+                    category=item['category']
                 )
                 db.session.add(new_product)
         
         db.session.commit()
-        print("Database updated successfully with details and warranty.")
+        print("Database updated successfully with categories.")
 
 if __name__ == "__main__":
     main()
